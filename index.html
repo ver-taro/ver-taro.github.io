@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>私の言葉帖 保存テスト</title>
+  <title>私の言葉帖 JSONテスト</title>
   <style>
     body {
       margin: 0;
@@ -29,6 +29,10 @@
       font-weight: normal;
     }
 
+    p {
+      margin: 8px 0;
+    }
+
     label {
       display: block;
       margin-top: 16px;
@@ -50,7 +54,7 @@
 
     button {
       width: 100%;
-      margin-top: 16px;
+      margin-top: 12px;
       padding: 12px;
       border: none;
       border-radius: 10px;
@@ -59,22 +63,44 @@
       font-size: 16px;
     }
 
+    button.secondary {
+      background: #1B1715;
+      border: 1px solid #B49A67;
+    }
+
+    button.danger {
+      background: #8A2F35;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      margin-top: 8px;
+      color: #E6DDC8;
+    }
+
     .message {
       margin-top: 14px;
       color: #B9A98F;
       font-size: 14px;
+      white-space: pre-wrap;
     }
 
     .line {
       margin: 18px 0;
       border-top: 1px solid #4A3B2A;
     }
+
+    .note {
+      color: #B9A98F;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <main class="card">
     <h1>✦ 私の言葉帖</h1>
-    <p>これは保存確認用のテスト画面です。</p>
+    <p>JSONバックアップ確認用のテスト画面です。</p>
+    <p class="note">今回は、メモ1件だけを書き出し・復元します。</p>
 
     <div class="line"></div>
 
@@ -82,16 +108,29 @@
     <textarea id="memo" placeholder="ここに何か入力してください"></textarea>
 
     <button id="saveButton">保存する</button>
+    <button id="exportButton" class="secondary">JSONを書き出す</button>
 
-    <p id="message" class="message">まだ保存していません。</p>
+    <div class="line"></div>
+
+    <label for="importFile">JSONを読み込む</label>
+    <input id="importFile" type="file" accept="application/json,.json">
+
+    <button id="clearButton" class="danger">保存内容を消す</button>
+
+    <p id="message" class="message">まだ操作していません。</p>
   </main>
 
   <script>
+    const storageKey = "kotobacho_json_test_memo";
+
     const memo = document.getElementById("memo");
     const saveButton = document.getElementById("saveButton");
+    const exportButton = document.getElementById("exportButton");
+    const importFile = document.getElementById("importFile");
+    const clearButton = document.getElementById("clearButton");
     const message = document.getElementById("message");
 
-    const savedText = localStorage.getItem("kotobacho_test_memo");
+    const savedText = localStorage.getItem(storageKey);
 
     if (savedText) {
       memo.value = savedText;
@@ -99,8 +138,73 @@
     }
 
     saveButton.addEventListener("click", function () {
-      localStorage.setItem("kotobacho_test_memo", memo.value);
+      localStorage.setItem(storageKey, memo.value);
       message.textContent = "保存しました。";
+    });
+
+    exportButton.addEventListener("click", function () {
+      const data = {
+        appName: "私の言葉帖",
+        testType: "json-backup-test",
+        memo: memo.value,
+        exportedAt: new Date().toISOString()
+      };
+
+      const jsonText = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonText], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "kotobacho-test-backup.json";
+      link.click();
+
+      URL.revokeObjectURL(url);
+
+      message.textContent = "JSONを書き出しました。";
+    });
+
+    importFile.addEventListener("change", function () {
+      const file = importFile.files[0];
+
+      if (!file) {
+        message.textContent = "ファイルが選ばれていません。";
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function () {
+        try {
+          const data = JSON.parse(reader.result);
+
+          if (!data || typeof data.memo !== "string") {
+            message.textContent = "このJSONは、今回のテスト用形式ではありません。";
+            return;
+          }
+
+          memo.value = data.memo;
+          localStorage.setItem(storageKey, data.memo);
+          message.textContent = "JSONを読み込み、内容を復元しました。";
+        } catch (error) {
+          message.textContent = "JSONの読み込みに失敗しました。";
+        }
+      };
+
+      reader.readAsText(file);
+    });
+
+    clearButton.addEventListener("click", function () {
+      const result = confirm("保存内容を消します。よろしいですか？");
+
+      if (!result) {
+        message.textContent = "削除をキャンセルしました。";
+        return;
+      }
+
+      localStorage.removeItem(storageKey);
+      memo.value = "";
+      message.textContent = "保存内容を消しました。";
     });
   </script>
 </body>
