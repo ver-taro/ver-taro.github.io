@@ -3,151 +3,608 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>私の言葉帖 JSONテスト</title>
+  <title>私の言葉帖</title>
   <style>
+    :root {
+      --bg: #070505;
+      --card: #12100F;
+      --card-light: #1B1715;
+      --text: #E6DDC8;
+      --subtext: #B9A98F;
+      --accent: #7E343B;
+      --accent-light: #A65363;
+      --gold: #B49A67;
+      --line: #4A3B2A;
+      --danger: #8A2F35;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 24px;
-      background: #070505;
-      color: #E6DDC8;
-      font-family: sans-serif;
+      padding: 20px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
       line-height: 1.7;
     }
 
-    .card {
-      max-width: 520px;
+    .app {
+      max-width: 640px;
       margin: 0 auto;
-      padding: 20px;
-      background: #12100F;
-      border: 1px solid #B49A67;
-      border-radius: 16px;
+    }
+
+    header {
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
     }
 
     h1 {
-      margin-top: 0;
-      font-size: 24px;
-      font-weight: normal;
+      margin: 0;
+      color: var(--text);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
     }
 
-    p {
-      margin: 8px 0;
+    h2 {
+      margin: 0 0 16px;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .toolbar {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card-light);
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--subtext);
+      opacity: 0.8;
     }
 
     label {
       display: block;
-      margin-top: 16px;
-      color: #B9A98F;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 140px;
-      margin-top: 8px;
-      padding: 12px;
-      box-sizing: border-box;
-      border-radius: 10px;
-      border: 1px solid #4A3B2A;
-      background: #1B1715;
-      color: #E6DDC8;
-      font-size: 16px;
+      margin: 14px 0 6px;
+      color: var(--subtext);
+      font-size: 14px;
     }
 
     button {
       width: 100%;
-      margin-top: 12px;
-      padding: 12px;
+      padding: 12px 14px;
       border: none;
-      border-radius: 10px;
-      background: #7E343B;
-      color: #E6DDC8;
+      border-radius: 12px;
+      background: var(--accent);
+      color: var(--text);
       font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--accent-light);
     }
 
     button.secondary {
-      background: #1B1715;
-      border: 1px solid #B49A67;
+      background: var(--card-light);
+      border: 1px solid var(--gold);
     }
 
     button.danger {
-      background: #8A2F35;
+      background: var(--danger);
     }
 
-    input[type="file"] {
-      width: 100%;
+    .card {
+      margin-bottom: 12px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+    }
+
+    .term-card {
+      cursor: pointer;
+    }
+
+    .term-card:hover {
+      border-color: var(--gold);
+    }
+
+    .term-title {
+      margin: 0;
+      font-size: 20px;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .term-reading {
+      margin: 2px 0 8px;
+      color: var(--subtext);
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .term-preview {
+      margin: 0;
+      color: var(--text);
+      font-size: 15px;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .date {
       margin-top: 8px;
-      color: #E6DDC8;
+      color: var(--subtext);
+      font-size: 12px;
+    }
+
+    .detail-title {
+      margin-bottom: 4px;
+      font-size: 28px;
+      word-break: break-word;
+    }
+
+    .detail-reading {
+      margin: 0 0 18px;
+      color: var(--subtext);
+      word-break: break-word;
+    }
+
+    .detail-body {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .empty {
+      padding: 24px 16px;
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      color: var(--subtext);
+      text-align: center;
     }
 
     .message {
-      margin-top: 14px;
-      color: #B9A98F;
+      margin-top: 12px;
+      color: var(--subtext);
       font-size: 14px;
       white-space: pre-wrap;
     }
 
     .line {
       margin: 18px 0;
-      border-top: 1px solid #4A3B2A;
+      border-top: 1px solid var(--line);
     }
 
-    .note {
-      color: #B9A98F;
+    input[type="file"] {
+      padding: 10px 0;
+      border: none;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .small-note {
+      color: var(--subtext);
       font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .detail-title {
+        font-size: 26px;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="card">
-    <h1>✦ 私の言葉帖</h1>
-    <p>JSONバックアップ確認用のテスト画面です。</p>
-    <p class="note">今回は、メモ1件だけを書き出し・復元します。</p>
+  <div class="app">
+    <header>
+      <h1>✦ 私の言葉帖</h1>
+    </header>
 
-    <div class="line"></div>
+    <section id="listScreen" class="screen active">
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="言葉を検索">
+        <div class="row">
+          <button id="addButton">＋ 言葉を追加</button>
+          <button id="backupButton" class="secondary">バックアップ</button>
+        </div>
+      </div>
 
-    <label for="memo">テスト用メモ</label>
-    <textarea id="memo" placeholder="ここに何か入力してください"></textarea>
+      <div id="termList"></div>
+    </section>
 
-    <button id="saveButton">保存する</button>
-    <button id="exportButton" class="secondary">JSONを書き出す</button>
+    <section id="formScreen" class="screen">
+      <h2 id="formTitle">言葉を追加</h2>
 
-    <div class="line"></div>
+      <label for="termInput">用語</label>
+      <input id="termInput" type="text" autocomplete="off">
 
-    <label for="importFile">JSONを読み込む</label>
-    <input id="importFile" type="file" accept="application/json,.json">
+      <label for="readingInput">読み</label>
+      <input id="readingInput" type="text" autocomplete="off">
 
-    <button id="clearButton" class="danger">保存内容を消す</button>
+      <label for="detailInput">詳細</label>
+      <textarea id="detailInput"></textarea>
 
-    <p id="message" class="message">まだ操作していません。</p>
-  </main>
+      <div class="line"></div>
+
+      <div class="row">
+        <button id="saveTermButton">保存する</button>
+        <button id="cancelFormButton" class="secondary">キャンセル</button>
+      </div>
+
+      <p id="formMessage" class="message"></p>
+    </section>
+
+    <section id="detailScreen" class="screen">
+      <h2 id="detailTerm" class="detail-title"></h2>
+      <p id="detailReading" class="detail-reading"></p>
+
+      <div id="detailBody" class="detail-body"></div>
+
+      <p id="detailDates" class="date"></p>
+
+      <div class="line"></div>
+
+      <div class="row">
+        <button id="editButton">編集する</button>
+        <button id="backFromDetailButton" class="secondary">戻る</button>
+      </div>
+
+      <button id="deleteButton" class="danger">削除する</button>
+    </section>
+
+    <section id="backupScreen" class="screen">
+      <h2>バックアップ</h2>
+
+      <p class="small-note">
+        JSONを読み込むと、現在の保存内容が読み込んだ内容で置き換わります。
+        必要なら先に書き出してください。
+      </p>
+
+      <button id="exportButton">JSONを書き出す</button>
+
+      <label for="importFile">JSONを読み込む</label>
+      <input id="importFile" type="file" accept="application/json,.json">
+
+      <div class="line"></div>
+
+      <button id="backFromBackupButton" class="secondary">戻る</button>
+
+      <p id="backupMessage" class="message"></p>
+    </section>
+  </div>
 
   <script>
-    const storageKey = "kotobacho_json_test_memo";
+    const storageKey = "watashi_no_kotobacho_terms_v1";
 
-    const memo = document.getElementById("memo");
-    const saveButton = document.getElementById("saveButton");
+    let terms = [];
+    let currentTermId = null;
+    let editingTermId = null;
+
+    const screens = {
+      list: document.getElementById("listScreen"),
+      form: document.getElementById("formScreen"),
+      detail: document.getElementById("detailScreen"),
+      backup: document.getElementById("backupScreen")
+    };
+
+    const searchInput = document.getElementById("searchInput");
+    const termList = document.getElementById("termList");
+
+    const addButton = document.getElementById("addButton");
+    const backupButton = document.getElementById("backupButton");
+
+    const formTitle = document.getElementById("formTitle");
+    const termInput = document.getElementById("termInput");
+    const readingInput = document.getElementById("readingInput");
+    const detailInput = document.getElementById("detailInput");
+    const saveTermButton = document.getElementById("saveTermButton");
+    const cancelFormButton = document.getElementById("cancelFormButton");
+    const formMessage = document.getElementById("formMessage");
+
+    const detailTerm = document.getElementById("detailTerm");
+    const detailReading = document.getElementById("detailReading");
+    const detailBody = document.getElementById("detailBody");
+    const detailDates = document.getElementById("detailDates");
+    const editButton = document.getElementById("editButton");
+    const deleteButton = document.getElementById("deleteButton");
+    const backFromDetailButton = document.getElementById("backFromDetailButton");
+
     const exportButton = document.getElementById("exportButton");
     const importFile = document.getElementById("importFile");
-    const clearButton = document.getElementById("clearButton");
-    const message = document.getElementById("message");
+    const backFromBackupButton = document.getElementById("backFromBackupButton");
+    const backupMessage = document.getElementById("backupMessage");
 
-    const savedText = localStorage.getItem(storageKey);
+    function showScreen(name) {
+      Object.values(screens).forEach(function (screen) {
+        screen.classList.remove("active");
+      });
 
-    if (savedText) {
-      memo.value = savedText;
-      message.textContent = "保存済みの内容を読み込みました。";
+      screens[name].classList.add("active");
+      window.scrollTo(0, 0);
     }
 
-    saveButton.addEventListener("click", function () {
-      localStorage.setItem(storageKey, memo.value);
-      message.textContent = "保存しました。";
-    });
+    function createId() {
+      return "term-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+    }
 
-    exportButton.addEventListener("click", function () {
+    function formatDate(isoText) {
+      if (!isoText) return "";
+
+      const date = new Date(isoText);
+
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
+
+      return date.toLocaleDateString("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+    }
+
+    function loadTerms() {
+      const saved = localStorage.getItem(storageKey);
+
+      if (!saved) {
+        terms = [];
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(saved);
+
+        if (Array.isArray(parsed)) {
+          terms = parsed;
+        } else {
+          terms = [];
+        }
+      } catch (error) {
+        terms = [];
+      }
+    }
+
+    function saveTerms() {
+      localStorage.setItem(storageKey, JSON.stringify(terms));
+    }
+
+    function getSortedTerms() {
+      return [...terms].sort(function (a, b) {
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      });
+    }
+
+    function renderList() {
+      const keyword = searchInput.value.trim().toLowerCase();
+      termList.innerHTML = "";
+
+      let list = getSortedTerms();
+
+      if (keyword) {
+        list = list.filter(function (item) {
+          return (
+            item.term.toLowerCase().includes(keyword) ||
+            item.reading.toLowerCase().includes(keyword) ||
+            item.detail.toLowerCase().includes(keyword)
+          );
+        });
+      }
+
+      if (terms.length === 0) {
+        termList.innerHTML = `
+          <div class="empty">
+            <p>まだ言葉は登録されていません。</p>
+            <p>「＋ 言葉を追加」から、最初の言葉を記録できます。</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (list.length === 0) {
+        termList.innerHTML = `
+          <div class="empty">
+            <p>該当する言葉が見つかりません。</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach(function (item) {
+        const card = document.createElement("div");
+        card.className = "card term-card";
+
+        const preview = item.detail
+          ? item.detail.slice(0, 80) + (item.detail.length > 80 ? "…" : "")
+          : "詳細は登録されていません。";
+
+        card.innerHTML = `
+          <h2 class="term-title"></h2>
+          <p class="term-reading"></p>
+          <p class="term-preview"></p>
+          <p class="date"></p>
+        `;
+
+        card.querySelector(".term-title").textContent = item.term;
+        card.querySelector(".term-reading").textContent = item.reading || "";
+        card.querySelector(".term-preview").textContent = preview;
+        card.querySelector(".date").textContent = "更新日 " + formatDate(item.updatedAt);
+
+        card.addEventListener("click", function () {
+          openDetail(item.id);
+        });
+
+        termList.appendChild(card);
+      });
+    }
+
+    function openAddForm() {
+      editingTermId = null;
+      formTitle.textContent = "言葉を追加";
+      termInput.value = "";
+      readingInput.value = "";
+      detailInput.value = "";
+      formMessage.textContent = "";
+      showScreen("form");
+      termInput.focus();
+    }
+
+    function openEditForm(id) {
+      const item = terms.find(function (term) {
+        return term.id === id;
+      });
+
+      if (!item) return;
+
+      editingTermId = id;
+      formTitle.textContent = "言葉を編集";
+      termInput.value = item.term;
+      readingInput.value = item.reading;
+      detailInput.value = item.detail;
+      formMessage.textContent = "";
+      showScreen("form");
+    }
+
+    function saveForm() {
+      const termText = termInput.value.trim();
+      const readingText = readingInput.value.trim();
+      const detailText = detailInput.value.trim();
+
+      if (!termText) {
+        formMessage.textContent = "用語を入力してください。";
+        return;
+      }
+
+      const now = new Date().toISOString();
+
+      if (editingTermId) {
+        const item = terms.find(function (term) {
+          return term.id === editingTermId;
+        });
+
+        if (!item) return;
+
+        item.term = termText;
+        item.reading = readingText;
+        item.detail = detailText;
+        item.updatedAt = now;
+
+        currentTermId = item.id;
+      } else {
+        const newTerm = {
+          id: createId(),
+          term: termText,
+          reading: readingText,
+          detail: detailText,
+          createdAt: now,
+          updatedAt: now
+        };
+
+        terms.push(newTerm);
+        currentTermId = newTerm.id;
+      }
+
+      saveTerms();
+      renderList();
+      openDetail(currentTermId);
+    }
+
+    function openDetail(id) {
+      const item = terms.find(function (term) {
+        return term.id === id;
+      });
+
+      if (!item) {
+        renderList();
+        showScreen("list");
+        return;
+      }
+
+      currentTermId = id;
+
+      detailTerm.textContent = item.term;
+      detailReading.textContent = item.reading || "";
+      detailReading.style.display = item.reading ? "block" : "none";
+      detailBody.textContent = item.detail || "詳細は登録されていません。";
+      detailDates.textContent =
+        "登録日 " + formatDate(item.createdAt) + " ／ 更新日 " + formatDate(item.updatedAt);
+
+      showScreen("detail");
+    }
+
+    function deleteCurrentTerm() {
+      if (!currentTermId) return;
+
+      const result = confirm("この用語を削除します。よろしいですか？");
+
+      if (!result) return;
+
+      terms = terms.filter(function (term) {
+        return term.id !== currentTermId;
+      });
+
+      currentTermId = null;
+      saveTerms();
+      renderList();
+      showScreen("list");
+    }
+
+    function exportJson() {
       const data = {
         appName: "私の言葉帖",
-        testType: "json-backup-test",
-        memo: memo.value,
-        exportedAt: new Date().toISOString()
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        terms: terms
       };
 
       const jsonText = JSON.stringify(data, null, 2);
@@ -156,19 +613,16 @@
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = "kotobacho-test-backup.json";
+      link.download = "watashi-no-kotobacho-backup.json";
       link.click();
 
       URL.revokeObjectURL(url);
+      backupMessage.textContent = "JSONを書き出しました。";
+    }
 
-      message.textContent = "JSONを書き出しました。";
-    });
-
-    importFile.addEventListener("change", function () {
-      const file = importFile.files[0];
-
+    function importJson(file) {
       if (!file) {
-        message.textContent = "ファイルが選ばれていません。";
+        backupMessage.textContent = "ファイルが選ばれていません。";
         return;
       }
 
@@ -178,34 +632,88 @@
         try {
           const data = JSON.parse(reader.result);
 
-          if (!data || typeof data.memo !== "string") {
-            message.textContent = "このJSONは、今回のテスト用形式ではありません。";
+          if (!data || !Array.isArray(data.terms)) {
+            backupMessage.textContent = "JSONの読み込みに失敗しました。";
             return;
           }
 
-          memo.value = data.memo;
-          localStorage.setItem(storageKey, data.memo);
-          message.textContent = "JSONを読み込み、内容を復元しました。";
+          const result = confirm(
+            "JSONを読み込むと、現在の保存内容が読み込んだ内容で置き換わります。よろしいですか？"
+          );
+
+          if (!result) {
+            backupMessage.textContent = "読み込みをキャンセルしました。";
+            return;
+          }
+
+          terms = data.terms.map(function (item) {
+            const now = new Date().toISOString();
+
+            return {
+              id: item.id || createId(),
+              term: String(item.term || ""),
+              reading: String(item.reading || ""),
+              detail: String(item.detail || ""),
+              createdAt: item.createdAt || now,
+              updatedAt: item.updatedAt || now
+            };
+          }).filter(function (item) {
+            return item.term.trim();
+          });
+
+          saveTerms();
+          renderList();
+          importFile.value = "";
+          backupMessage.textContent = "JSONを読み込み、内容を復元しました。";
+          showScreen("list");
         } catch (error) {
-          message.textContent = "JSONの読み込みに失敗しました。";
+          backupMessage.textContent = "JSONの読み込みに失敗しました。";
         }
       };
 
       reader.readAsText(file);
+    }
+
+    addButton.addEventListener("click", openAddForm);
+
+    backupButton.addEventListener("click", function () {
+      backupMessage.textContent = "";
+      showScreen("backup");
     });
 
-    clearButton.addEventListener("click", function () {
-      const result = confirm("保存内容を消します。よろしいですか？");
+    searchInput.addEventListener("input", renderList);
 
-      if (!result) {
-        message.textContent = "削除をキャンセルしました。";
-        return;
-      }
+    saveTermButton.addEventListener("click", saveForm);
 
-      localStorage.removeItem(storageKey);
-      memo.value = "";
-      message.textContent = "保存内容を消しました。";
+    cancelFormButton.addEventListener("click", function () {
+      renderList();
+      showScreen("list");
     });
+
+    editButton.addEventListener("click", function () {
+      openEditForm(currentTermId);
+    });
+
+    deleteButton.addEventListener("click", deleteCurrentTerm);
+
+    backFromDetailButton.addEventListener("click", function () {
+      renderList();
+      showScreen("list");
+    });
+
+    exportButton.addEventListener("click", exportJson);
+
+    importFile.addEventListener("change", function () {
+      importJson(importFile.files[0]);
+    });
+
+    backFromBackupButton.addEventListener("click", function () {
+      renderList();
+      showScreen("list");
+    });
+
+    loadTerms();
+    renderList();
   </script>
 </body>
 </html>
