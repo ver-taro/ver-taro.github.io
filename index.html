@@ -2,10 +2,106 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>私の言葉帖 テスト</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>私の言葉帖 保存テスト</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #070505;
+      color: #E6DDC8;
+      font-family: sans-serif;
+      line-height: 1.7;
+    }
+
+    .card {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #12100F;
+      border: 1px solid #B49A67;
+      border-radius: 16px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+      font-weight: normal;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      color: #B9A98F;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      margin-top: 8px;
+      padding: 12px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: 1px solid #4A3B2A;
+      background: #1B1715;
+      color: #E6DDC8;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #7E343B;
+      color: #E6DDC8;
+      font-size: 16px;
+    }
+
+    .message {
+      margin-top: 14px;
+      color: #B9A98F;
+      font-size: 14px;
+    }
+
+    .line {
+      margin: 18px 0;
+      border-top: 1px solid #4A3B2A;
+    }
+  </style>
 </head>
 <body>
-  <h1>私の言葉帖</h1>
-  <p>GitHub Pagesの表示テストです。</p>
+  <main class="card">
+    <h1>✦ 私の言葉帖</h1>
+    <p>これは保存確認用のテスト画面です。</p>
+
+    <div class="line"></div>
+
+    <label for="memo">テスト用メモ</label>
+    <textarea id="memo" placeholder="ここに何か入力してください"></textarea>
+
+    <button id="saveButton">保存する</button>
+
+    <p id="message" class="message">まだ保存していません。</p>
+  </main>
+
+  <script>
+    const memo = document.getElementById("memo");
+    const saveButton = document.getElementById("saveButton");
+    const message = document.getElementById("message");
+
+    const savedText = localStorage.getItem("kotobacho_test_memo");
+
+    if (savedText) {
+      memo.value = savedText;
+      message.textContent = "保存済みの内容を読み込みました。";
+    }
+
+    saveButton.addEventListener("click", function () {
+      localStorage.setItem("kotobacho_test_memo", memo.value);
+      message.textContent = "保存しました。";
+    });
+  </script>
 </body>
 </html>
