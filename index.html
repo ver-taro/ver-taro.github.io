@@ -19,13 +19,9 @@
       --shadow: rgba(0, 0, 0, 0.45);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      background: var(--bg);
-    }
+    html { background: var(--bg); }
 
     body {
       margin: 0;
@@ -80,9 +76,7 @@
       letter-spacing: 0.08em;
     }
 
-    .screen {
-      display: none;
-    }
+    .screen { display: none; }
 
     .screen.active {
       display: block;
@@ -90,14 +84,8 @@
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(4px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .toolbar {
@@ -111,12 +99,9 @@
       gap: 10px;
     }
 
-    .search-wrap {
-      position: relative;
-    }
-
     input,
-    textarea {
+    textarea,
+    select {
       width: 100%;
       padding: 12px 13px;
       border: 1px solid var(--line);
@@ -129,13 +114,14 @@
     }
 
     input:focus,
-    textarea:focus {
+    textarea:focus,
+    select:focus {
       border-color: var(--gold);
       box-shadow: 0 0 0 2px rgba(180, 154, 103, 0.14);
     }
 
     textarea {
-      min-height: 190px;
+      min-height: 150px;
       resize: vertical;
     }
 
@@ -166,9 +152,7 @@
       box-shadow: inset 0 0 0 1px rgba(230, 221, 200, 0.08);
     }
 
-    button:active {
-      transform: translateY(1px);
-    }
+    button:active { transform: translateY(1px); }
 
     button.secondary {
       background: rgba(27, 23, 21, 0.92);
@@ -195,13 +179,9 @@
       transition: border-color 0.15s ease, transform 0.15s ease;
     }
 
-    .term-card:active {
-      transform: scale(0.995);
-    }
+    .term-card:active { transform: scale(0.995); }
 
-    .term-card:hover {
-      border-color: var(--gold);
-    }
+    .term-card:hover { border-color: var(--gold); }
 
     .term-title-row {
       display: flex;
@@ -225,15 +205,18 @@
       flex: 0 0 auto;
     }
 
-    .term-reading {
-      margin: 0 0 9px;
+    .term-reading,
+    .term-english,
+    .term-tags {
+      margin: 0 0 6px;
       color: var(--subtext);
       font-size: 14px;
       word-break: break-word;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
     }
 
     .term-preview {
-      margin: 0;
+      margin: 8px 0 0;
       color: var(--text);
       font-size: 15px;
       font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
@@ -241,11 +224,23 @@
       white-space: pre-wrap;
     }
 
+    .tag-pill {
+      display: inline-block;
+      margin: 0 5px 5px 0;
+      padding: 2px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--subtext);
+      background: rgba(27, 23, 21, 0.8);
+      font-size: 12px;
+    }
+
     .date {
       margin-top: 10px;
       color: var(--subtext);
       font-size: 12px;
       text-align: right;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
     }
 
     .detail-title {
@@ -257,10 +252,20 @@
     }
 
     .detail-reading {
-      margin: 0 0 16px;
+      margin: 0 0 8px;
       color: var(--subtext);
       text-align: center;
       word-break: break-word;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+    }
+
+    .detail-meta {
+      margin: 0 0 8px;
+      color: var(--subtext);
+      text-align: center;
+      word-break: break-word;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+      font-size: 14px;
     }
 
     .ornament {
@@ -279,6 +284,18 @@
       height: 1px;
       background: var(--gold);
       opacity: 0.7;
+    }
+
+    .detail-section {
+      margin-top: 14px;
+    }
+
+    .detail-section-title {
+      margin: 0 0 6px;
+      color: var(--gold);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
     }
 
     .detail-body {
@@ -347,6 +364,7 @@
       font-size: 14px;
       text-decoration: none;
       cursor: pointer;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
     }
 
     .backup-box {
@@ -358,31 +376,21 @@
     }
 
     @media (max-width: 480px) {
-      body {
-        padding: 14px;
-      }
+      body { padding: 14px; }
 
       header {
         padding: 16px 14px 14px;
         border-radius: 20px;
       }
 
-      h1 {
-        font-size: 25px;
-      }
+      h1 { font-size: 25px; }
 
-      .row {
-        flex-direction: column;
-      }
+      .row { flex-direction: column; }
 
-      .detail-title {
-        font-size: 28px;
-      }
+      .detail-title { font-size: 28px; }
 
       .ornament::before,
-      .ornament::after {
-        width: 54px;
-      }
+      .ornament::after { width: 54px; }
     }
   </style>
 </head>
@@ -395,9 +403,17 @@
 
     <section id="listScreen" class="screen active">
       <div class="toolbar">
-        <div class="search-wrap">
+        <div>
           <input id="searchInput" type="search" placeholder="言葉を検索">
           <p id="searchStatus" class="search-status">入力すると自動で検索されます。</p>
+        </div>
+
+        <div>
+          <label for="sortSelect">並び替え</label>
+          <select id="sortSelect">
+            <option value="updated">更新日順</option>
+            <option value="kana">五十音順</option>
+          </select>
         </div>
 
         <div class="row">
@@ -415,13 +431,22 @@
         <h2 id="formTitle">言葉を追加</h2>
 
         <label for="termInput">用語</label>
-        <input id="termInput" type="text" autocomplete="off" placeholder="例）逡巡">
+        <input id="termInput" type="text" autocomplete="off" placeholder="例）好き">
 
         <label for="readingInput">読み</label>
-        <input id="readingInput" type="text" autocomplete="off" placeholder="例）しゅんじゅん">
+        <input id="readingInput" type="text" autocomplete="off" placeholder="例）すき">
+
+        <label for="englishInput">英名</label>
+        <input id="englishInput" type="text" autocomplete="off" placeholder="例）love / like">
+
+        <label for="tagsInput">タグ</label>
+        <input id="tagsInput" type="text" autocomplete="off" placeholder="例）感情, 恋愛, 好意">
 
         <label for="detailInput">詳細</label>
-        <textarea id="detailInput" placeholder="言葉の意味や、自分のメモなどを自由に書いてください。"></textarea>
+        <textarea id="detailInput" placeholder="意味、ニュアンス、使い分けなど。"></textarea>
+
+        <label for="exampleInput">使用例</label>
+        <textarea id="exampleInput" placeholder="例）私はリンゴが好き。"></textarea>
 
         <div class="line"></div>
 
@@ -440,10 +465,20 @@
 
         <h2 id="detailTerm" class="detail-title"></h2>
         <p id="detailReading" class="detail-reading"></p>
+        <p id="detailEnglish" class="detail-meta"></p>
+        <div id="detailTags" class="detail-meta"></div>
 
         <div class="ornament">✦</div>
 
-        <div id="detailBody" class="detail-body"></div>
+        <div class="detail-section">
+          <p class="detail-section-title">詳細</p>
+          <div id="detailBody" class="detail-body"></div>
+        </div>
+
+        <div class="detail-section">
+          <p class="detail-section-title">使用例</p>
+          <div id="detailExample" class="detail-body"></div>
+        </div>
 
         <p id="detailDates" class="date"></p>
 
@@ -491,6 +526,7 @@
 
   <script>
     const storageKey = "watashi_no_kotobacho_terms_v1";
+    const sortStorageKey = "watashi_no_kotobacho_sort_v1";
 
     let terms = [];
     let currentTermId = null;
@@ -505,6 +541,7 @@
 
     const searchInput = document.getElementById("searchInput");
     const searchStatus = document.getElementById("searchStatus");
+    const sortSelect = document.getElementById("sortSelect");
     const termList = document.getElementById("termList");
 
     const addButton = document.getElementById("addButton");
@@ -513,7 +550,10 @@
     const formTitle = document.getElementById("formTitle");
     const termInput = document.getElementById("termInput");
     const readingInput = document.getElementById("readingInput");
+    const englishInput = document.getElementById("englishInput");
+    const tagsInput = document.getElementById("tagsInput");
     const detailInput = document.getElementById("detailInput");
+    const exampleInput = document.getElementById("exampleInput");
     const saveTermButton = document.getElementById("saveTermButton");
     const cancelFormButton = document.getElementById("cancelFormButton");
     const cancelTopLink = document.getElementById("cancelTopLink");
@@ -521,7 +561,10 @@
 
     const detailTerm = document.getElementById("detailTerm");
     const detailReading = document.getElementById("detailReading");
+    const detailEnglish = document.getElementById("detailEnglish");
+    const detailTags = document.getElementById("detailTags");
     const detailBody = document.getElementById("detailBody");
+    const detailExample = document.getElementById("detailExample");
     const detailDates = document.getElementById("detailDates");
     const editButton = document.getElementById("editButton");
     const deleteButton = document.getElementById("deleteButton");
@@ -563,6 +606,22 @@
       });
     }
 
+    function normalizeTerm(item) {
+      const now = new Date().toISOString();
+
+      return {
+        id: item.id || createId(),
+        term: String(item.term || ""),
+        reading: String(item.reading || ""),
+        english: String(item.english || ""),
+        tags: String(item.tags || ""),
+        detail: String(item.detail || ""),
+        example: String(item.example || ""),
+        createdAt: item.createdAt || now,
+        updatedAt: item.updatedAt || now
+      };
+    }
+
     function loadTerms() {
       const saved = localStorage.getItem(storageKey);
 
@@ -575,7 +634,8 @@
         const parsed = JSON.parse(saved);
 
         if (Array.isArray(parsed)) {
-          terms = parsed;
+          terms = parsed.map(normalizeTerm);
+          saveTerms();
         } else {
           terms = [];
         }
@@ -588,8 +648,35 @@
       localStorage.setItem(storageKey, JSON.stringify(terms));
     }
 
+    function loadSort() {
+      const savedSort = localStorage.getItem(sortStorageKey);
+
+      if (savedSort === "kana" || savedSort === "updated") {
+        sortSelect.value = savedSort;
+      }
+    }
+
+    function saveSort() {
+      localStorage.setItem(sortStorageKey, sortSelect.value);
+    }
+
+    function getSortKey(item) {
+      return (item.reading || item.term || "").trim();
+    }
+
     function getSortedTerms() {
-      return [...terms].sort(function (a, b) {
+      const list = [...terms];
+
+      if (sortSelect.value === "kana") {
+        return list.sort(function (a, b) {
+          return getSortKey(a).localeCompare(getSortKey(b), "ja-JP", {
+            sensitivity: "base",
+            numeric: true
+          });
+        });
+      }
+
+      return list.sort(function (a, b) {
         return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
       });
     }
@@ -603,12 +690,43 @@
           return (
             item.term.toLowerCase().includes(keyword) ||
             item.reading.toLowerCase().includes(keyword) ||
-            item.detail.toLowerCase().includes(keyword)
+            item.english.toLowerCase().includes(keyword) ||
+            item.tags.toLowerCase().includes(keyword) ||
+            item.detail.toLowerCase().includes(keyword) ||
+            item.example.toLowerCase().includes(keyword)
           );
         });
       }
 
       return list;
+    }
+
+    function splitTags(tagsText) {
+      return String(tagsText || "")
+        .split(/[、,]/)
+        .map(function (tag) {
+          return tag.trim();
+        })
+        .filter(Boolean);
+    }
+
+    function renderTags(container, tagsText) {
+      const tags = splitTags(tagsText);
+      container.innerHTML = "";
+
+      if (tags.length === 0) {
+        container.style.display = "none";
+        return;
+      }
+
+      container.style.display = "block";
+
+      tags.forEach(function (tag) {
+        const span = document.createElement("span");
+        span.className = "tag-pill";
+        span.textContent = tag;
+        container.appendChild(span);
+      });
     }
 
     function updateSearchStatus(filteredCount) {
@@ -663,12 +781,16 @@
             <span class="term-arrow">›</span>
           </div>
           <p class="term-reading"></p>
+          <p class="term-english"></p>
+          <div class="term-tags"></div>
           <p class="term-preview"></p>
           <p class="date"></p>
         `;
 
         card.querySelector(".term-title").textContent = item.term;
-        card.querySelector(".term-reading").textContent = item.reading || "";
+        card.querySelector(".term-reading").textContent = item.reading ? "読み：" + item.reading : "";
+        card.querySelector(".term-english").textContent = item.english ? "英名：" + item.english : "";
+        renderTags(card.querySelector(".term-tags"), item.tags);
         card.querySelector(".term-preview").textContent = preview;
         card.querySelector(".date").textContent = "更新日 " + formatDate(item.updatedAt);
 
@@ -685,9 +807,13 @@
       formTitle.textContent = "言葉を追加";
       termInput.value = "";
       readingInput.value = "";
+      englishInput.value = "";
+      tagsInput.value = "";
       detailInput.value = "";
+      exampleInput.value = "";
       formMessage.textContent = "";
       showScreen("form");
+
       setTimeout(function () {
         termInput.focus();
       }, 80);
@@ -704,7 +830,10 @@
       formTitle.textContent = "言葉を編集";
       termInput.value = item.term;
       readingInput.value = item.reading;
+      englishInput.value = item.english;
+      tagsInput.value = item.tags;
       detailInput.value = item.detail;
+      exampleInput.value = item.example;
       formMessage.textContent = "";
       showScreen("form");
     }
@@ -712,7 +841,10 @@
     function saveForm() {
       const termText = termInput.value.trim();
       const readingText = readingInput.value.trim();
+      const englishText = englishInput.value.trim();
+      const tagsText = tagsInput.value.trim();
       const detailText = detailInput.value.trim();
+      const exampleText = exampleInput.value.trim();
 
       if (!termText) {
         formMessage.textContent = "用語を入力してください。";
@@ -730,7 +862,10 @@
 
         item.term = termText;
         item.reading = readingText;
+        item.english = englishText;
+        item.tags = tagsText;
         item.detail = detailText;
+        item.example = exampleText;
         item.updatedAt = now;
 
         currentTermId = item.id;
@@ -739,7 +874,10 @@
           id: createId(),
           term: termText,
           reading: readingText,
+          english: englishText,
+          tags: tagsText,
           detail: detailText,
+          example: exampleText,
           createdAt: now,
           updatedAt: now
         };
@@ -767,9 +905,18 @@
       currentTermId = id;
 
       detailTerm.textContent = item.term;
-      detailReading.textContent = item.reading || "";
+
+      detailReading.textContent = item.reading ? "読み：" + item.reading : "";
       detailReading.style.display = item.reading ? "block" : "none";
+
+      detailEnglish.textContent = item.english ? "英名：" + item.english : "";
+      detailEnglish.style.display = item.english ? "block" : "none";
+
+      renderTags(detailTags, item.tags);
+
       detailBody.textContent = item.detail || "詳細は登録されていません。";
+      detailExample.textContent = item.example || "使用例は登録されていません。";
+
       detailDates.textContent =
         "登録日 " + formatDate(item.createdAt) + " ／ 更新日 " + formatDate(item.updatedAt);
 
@@ -796,7 +943,7 @@
     function exportJson() {
       const data = {
         appName: "私の言葉帖",
-        version: 1,
+        version: 2,
         exportedAt: new Date().toISOString(),
         terms: terms
       };
@@ -840,20 +987,11 @@
             return;
           }
 
-          terms = data.terms.map(function (item) {
-            const now = new Date().toISOString();
-
-            return {
-              id: item.id || createId(),
-              term: String(item.term || ""),
-              reading: String(item.reading || ""),
-              detail: String(item.detail || ""),
-              createdAt: item.createdAt || now,
-              updatedAt: item.updatedAt || now
-            };
-          }).filter(function (item) {
-            return item.term.trim();
-          });
+          terms = data.terms
+            .map(normalizeTerm)
+            .filter(function (item) {
+              return item.term.trim();
+            });
 
           saveTerms();
           renderList();
@@ -882,6 +1020,11 @@
 
     searchInput.addEventListener("input", renderList);
 
+    sortSelect.addEventListener("change", function () {
+      saveSort();
+      renderList();
+    });
+
     saveTermButton.addEventListener("click", saveForm);
 
     cancelFormButton.addEventListener("click", goBackToList);
@@ -906,6 +1049,7 @@
     backBackupTopLink.addEventListener("click", goBackToList);
 
     loadTerms();
+    loadSort();
     renderList();
   </script>
 </body>
