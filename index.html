@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>私の言葉帖</title>
   <style>
     :root {
@@ -16,38 +16,60 @@
       --gold: #B49A67;
       --line: #4A3B2A;
       --danger: #8A2F35;
+      --shadow: rgba(0, 0, 0, 0.45);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      background: var(--bg);
+    }
+
     body {
       margin: 0;
-      padding: 20px;
-      background: var(--bg);
+      min-height: 100vh;
+      padding: 18px;
+      background:
+        radial-gradient(circle at top, rgba(180, 154, 103, 0.08), transparent 32%),
+        linear-gradient(180deg, #0B0908 0%, var(--bg) 55%);
       color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-      line-height: 1.7;
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Hiragino Sans", "Yu Gothic", serif;
+      line-height: 1.75;
+      letter-spacing: 0.02em;
     }
 
     .app {
-      max-width: 640px;
+      max-width: 680px;
       margin: 0 auto;
+      padding-bottom: 28px;
     }
 
     header {
       margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
+      padding: 18px 16px 16px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(18, 16, 15, 0.92);
+      box-shadow: 0 12px 28px var(--shadow);
+      text-align: center;
+    }
+
+    .star {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--gold);
+      font-size: 20px;
+      line-height: 1;
     }
 
     h1 {
       margin: 0;
       color: var(--text);
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 500;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.14em;
     }
 
     h2 {
@@ -55,6 +77,7 @@
       font-size: 22px;
       font-weight: 500;
       color: var(--text);
+      letter-spacing: 0.08em;
     }
 
     .screen {
@@ -63,11 +86,23 @@
 
     .screen.active {
       display: block;
+      animation: fadeIn 0.18s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .toolbar {
       display: grid;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 16px;
     }
 
@@ -76,26 +111,38 @@
       gap: 10px;
     }
 
+    .search-wrap {
+      position: relative;
+    }
+
     input,
     textarea {
       width: 100%;
-      padding: 12px;
+      padding: 12px 13px;
       border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--card-light);
+      border-radius: 13px;
+      background: rgba(27, 23, 21, 0.95);
       color: var(--text);
       font-size: 16px;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(180, 154, 103, 0.14);
     }
 
     textarea {
-      min-height: 180px;
+      min-height: 190px;
       resize: vertical;
     }
 
     input::placeholder,
     textarea::placeholder {
       color: var(--subtext);
-      opacity: 0.8;
+      opacity: 0.75;
     }
 
     label {
@@ -103,57 +150,83 @@
       margin: 14px 0 6px;
       color: var(--subtext);
       font-size: 14px;
+      letter-spacing: 0.05em;
     }
 
     button {
       width: 100%;
       padding: 12px 14px;
       border: none;
-      border-radius: 12px;
-      background: var(--accent);
+      border-radius: 13px;
+      background: linear-gradient(180deg, var(--accent-light), var(--accent));
       color: var(--text);
       font-size: 16px;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
       cursor: pointer;
+      box-shadow: inset 0 0 0 1px rgba(230, 221, 200, 0.08);
     }
 
-    button:hover {
-      background: var(--accent-light);
+    button:active {
+      transform: translateY(1px);
     }
 
     button.secondary {
-      background: var(--card-light);
+      background: rgba(27, 23, 21, 0.92);
       border: 1px solid var(--gold);
+      color: var(--text);
     }
 
     button.danger {
-      background: var(--danger);
+      background: rgba(138, 47, 53, 0.86);
+      border: 1px solid rgba(166, 83, 99, 0.5);
     }
 
     .card {
       margin-bottom: 12px;
       padding: 16px;
       border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--card);
+      border-radius: 17px;
+      background: rgba(18, 16, 15, 0.94);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.26);
     }
 
     .term-card {
       cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .term-card:active {
+      transform: scale(0.995);
     }
 
     .term-card:hover {
       border-color: var(--gold);
     }
 
+    .term-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 2px;
+    }
+
     .term-title {
       margin: 0;
-      font-size: 20px;
+      font-size: 21px;
       color: var(--text);
       word-break: break-word;
+      letter-spacing: 0.05em;
+    }
+
+    .term-arrow {
+      color: var(--gold);
+      font-size: 20px;
+      flex: 0 0 auto;
     }
 
     .term-reading {
-      margin: 2px 0 8px;
+      margin: 0 0 9px;
       color: var(--subtext);
       font-size: 14px;
       word-break: break-word;
@@ -163,54 +236,86 @@
       margin: 0;
       color: var(--text);
       font-size: 15px;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
       word-break: break-word;
       white-space: pre-wrap;
     }
 
     .date {
-      margin-top: 8px;
+      margin-top: 10px;
       color: var(--subtext);
       font-size: 12px;
+      text-align: right;
     }
 
     .detail-title {
-      margin-bottom: 4px;
-      font-size: 28px;
+      margin-bottom: 2px;
+      font-size: 30px;
       word-break: break-word;
+      text-align: center;
+      letter-spacing: 0.08em;
     }
 
     .detail-reading {
-      margin: 0 0 18px;
+      margin: 0 0 16px;
       color: var(--subtext);
+      text-align: center;
       word-break: break-word;
+    }
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 14px auto 22px;
+      color: var(--gold);
+    }
+
+    .ornament::before,
+    .ornament::after {
+      content: "";
+      width: 72px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.7;
     }
 
     .detail-body {
-      padding: 16px;
+      padding: 17px;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--card);
+      border-radius: 16px;
+      background: rgba(18, 16, 15, 0.94);
       white-space: pre-wrap;
       word-break: break-word;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
     }
 
     .empty {
-      padding: 24px 16px;
+      padding: 26px 16px;
       border: 1px dashed var(--line);
-      border-radius: 16px;
+      border-radius: 17px;
       color: var(--subtext);
       text-align: center;
+      background: rgba(18, 16, 15, 0.72);
     }
 
-    .message {
-      margin-top: 12px;
+    .message,
+    .search-status {
+      margin: 8px 2px 0;
       color: var(--subtext);
       font-size: 14px;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
       white-space: pre-wrap;
     }
 
+    .search-status strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
     .line {
-      margin: 18px 0;
+      margin: 20px 0;
       border-top: 1px solid var(--line);
     }
 
@@ -224,23 +329,59 @@
     .small-note {
       color: var(--subtext);
       font-size: 14px;
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+    }
+
+    .screen-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(18, 16, 15, 0.88);
+      box-shadow: 0 12px 28px var(--shadow);
+    }
+
+    .top-link {
+      display: inline-block;
+      margin-bottom: 14px;
+      color: var(--gold);
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .backup-box {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(27, 23, 21, 0.8);
     }
 
     @media (max-width: 480px) {
       body {
-        padding: 16px;
+        padding: 14px;
+      }
+
+      header {
+        padding: 16px 14px 14px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 25px;
       }
 
       .row {
         flex-direction: column;
       }
 
-      h1 {
-        font-size: 24px;
+      .detail-title {
+        font-size: 28px;
       }
 
-      .detail-title {
-        font-size: 26px;
+      .ornament::before,
+      .ornament::after {
+        width: 54px;
       }
     }
   </style>
@@ -248,12 +389,17 @@
 <body>
   <div class="app">
     <header>
-      <h1>✦ 私の言葉帖</h1>
+      <span class="star">✦</span>
+      <h1>私の言葉帖</h1>
     </header>
 
     <section id="listScreen" class="screen active">
       <div class="toolbar">
-        <input id="searchInput" type="search" placeholder="言葉を検索">
+        <div class="search-wrap">
+          <input id="searchInput" type="search" placeholder="言葉を検索">
+          <p id="searchStatus" class="search-status">入力すると自動で検索されます。</p>
+        </div>
+
         <div class="row">
           <button id="addButton">＋ 言葉を追加</button>
           <button id="backupButton" class="secondary">バックアップ</button>
@@ -264,63 +410,82 @@
     </section>
 
     <section id="formScreen" class="screen">
-      <h2 id="formTitle">言葉を追加</h2>
+      <div class="screen-card">
+        <span id="cancelTopLink" class="top-link">‹ 戻る</span>
+        <h2 id="formTitle">言葉を追加</h2>
 
-      <label for="termInput">用語</label>
-      <input id="termInput" type="text" autocomplete="off">
+        <label for="termInput">用語</label>
+        <input id="termInput" type="text" autocomplete="off" placeholder="例）逡巡">
 
-      <label for="readingInput">読み</label>
-      <input id="readingInput" type="text" autocomplete="off">
+        <label for="readingInput">読み</label>
+        <input id="readingInput" type="text" autocomplete="off" placeholder="例）しゅんじゅん">
 
-      <label for="detailInput">詳細</label>
-      <textarea id="detailInput"></textarea>
+        <label for="detailInput">詳細</label>
+        <textarea id="detailInput" placeholder="言葉の意味や、自分のメモなどを自由に書いてください。"></textarea>
 
-      <div class="line"></div>
+        <div class="line"></div>
 
-      <div class="row">
-        <button id="saveTermButton">保存する</button>
-        <button id="cancelFormButton" class="secondary">キャンセル</button>
+        <div class="row">
+          <button id="saveTermButton">保存する</button>
+          <button id="cancelFormButton" class="secondary">キャンセル</button>
+        </div>
+
+        <p id="formMessage" class="message"></p>
       </div>
-
-      <p id="formMessage" class="message"></p>
     </section>
 
     <section id="detailScreen" class="screen">
-      <h2 id="detailTerm" class="detail-title"></h2>
-      <p id="detailReading" class="detail-reading"></p>
+      <div class="screen-card">
+        <span id="backTopLink" class="top-link">‹ 戻る</span>
 
-      <div id="detailBody" class="detail-body"></div>
+        <h2 id="detailTerm" class="detail-title"></h2>
+        <p id="detailReading" class="detail-reading"></p>
 
-      <p id="detailDates" class="date"></p>
+        <div class="ornament">✦</div>
 
-      <div class="line"></div>
+        <div id="detailBody" class="detail-body"></div>
 
-      <div class="row">
-        <button id="editButton">編集する</button>
-        <button id="backFromDetailButton" class="secondary">戻る</button>
+        <p id="detailDates" class="date"></p>
+
+        <div class="line"></div>
+
+        <div class="row">
+          <button id="editButton">編集する</button>
+          <button id="backFromDetailButton" class="secondary">戻る</button>
+        </div>
+
+        <button id="deleteButton" class="danger">削除する</button>
       </div>
-
-      <button id="deleteButton" class="danger">削除する</button>
     </section>
 
     <section id="backupScreen" class="screen">
-      <h2>バックアップ</h2>
+      <div class="screen-card">
+        <span id="backBackupTopLink" class="top-link">‹ 戻る</span>
+        <h2>バックアップ</h2>
 
-      <p class="small-note">
-        JSONを読み込むと、現在の保存内容が読み込んだ内容で置き換わります。
-        必要なら先に書き出してください。
-      </p>
+        <div class="backup-box">
+          <p class="small-note">
+            JSONを書き出すと、現在の言葉をバックアップファイルとして保存できます。
+          </p>
+          <button id="exportButton">JSONを書き出す</button>
+        </div>
 
-      <button id="exportButton">JSONを書き出す</button>
+        <div class="backup-box">
+          <p class="small-note">
+            JSONを読み込むと、現在の保存内容が読み込んだ内容で置き換わります。
+            必要なら先に書き出してください。
+          </p>
 
-      <label for="importFile">JSONを読み込む</label>
-      <input id="importFile" type="file" accept="application/json,.json">
+          <label for="importFile">JSONを読み込む</label>
+          <input id="importFile" type="file" accept="application/json,.json">
+        </div>
 
-      <div class="line"></div>
+        <div class="line"></div>
 
-      <button id="backFromBackupButton" class="secondary">戻る</button>
+        <button id="backFromBackupButton" class="secondary">戻る</button>
 
-      <p id="backupMessage" class="message"></p>
+        <p id="backupMessage" class="message"></p>
+      </div>
     </section>
   </div>
 
@@ -339,6 +504,7 @@
     };
 
     const searchInput = document.getElementById("searchInput");
+    const searchStatus = document.getElementById("searchStatus");
     const termList = document.getElementById("termList");
 
     const addButton = document.getElementById("addButton");
@@ -350,6 +516,7 @@
     const detailInput = document.getElementById("detailInput");
     const saveTermButton = document.getElementById("saveTermButton");
     const cancelFormButton = document.getElementById("cancelFormButton");
+    const cancelTopLink = document.getElementById("cancelTopLink");
     const formMessage = document.getElementById("formMessage");
 
     const detailTerm = document.getElementById("detailTerm");
@@ -359,10 +526,12 @@
     const editButton = document.getElementById("editButton");
     const deleteButton = document.getElementById("deleteButton");
     const backFromDetailButton = document.getElementById("backFromDetailButton");
+    const backTopLink = document.getElementById("backTopLink");
 
     const exportButton = document.getElementById("exportButton");
     const importFile = document.getElementById("importFile");
     const backFromBackupButton = document.getElementById("backFromBackupButton");
+    const backBackupTopLink = document.getElementById("backBackupTopLink");
     const backupMessage = document.getElementById("backupMessage");
 
     function showScreen(name) {
@@ -425,10 +594,8 @@
       });
     }
 
-    function renderList() {
+    function getFilteredTerms() {
       const keyword = searchInput.value.trim().toLowerCase();
-      termList.innerHTML = "";
-
       let list = getSortedTerms();
 
       if (keyword) {
@@ -441,6 +608,28 @@
         });
       }
 
+      return list;
+    }
+
+    function updateSearchStatus(filteredCount) {
+      const keyword = searchInput.value.trim();
+
+      if (!keyword) {
+        searchStatus.textContent = "入力すると自動で検索されます。";
+        return;
+      }
+
+      searchStatus.innerHTML = "「<strong></strong>」で検索中：" + filteredCount + "件";
+      searchStatus.querySelector("strong").textContent = keyword;
+    }
+
+    function renderList() {
+      const keyword = searchInput.value.trim();
+      const list = getFilteredTerms();
+
+      termList.innerHTML = "";
+      updateSearchStatus(list.length);
+
       if (terms.length === 0) {
         termList.innerHTML = `
           <div class="empty">
@@ -451,7 +640,7 @@
         return;
       }
 
-      if (list.length === 0) {
+      if (keyword && list.length === 0) {
         termList.innerHTML = `
           <div class="empty">
             <p>該当する言葉が見つかりません。</p>
@@ -465,11 +654,14 @@
         card.className = "card term-card";
 
         const preview = item.detail
-          ? item.detail.slice(0, 80) + (item.detail.length > 80 ? "…" : "")
+          ? item.detail.slice(0, 84) + (item.detail.length > 84 ? "…" : "")
           : "詳細は登録されていません。";
 
         card.innerHTML = `
-          <h2 class="term-title"></h2>
+          <div class="term-title-row">
+            <h2 class="term-title"></h2>
+            <span class="term-arrow">›</span>
+          </div>
           <p class="term-reading"></p>
           <p class="term-preview"></p>
           <p class="date"></p>
@@ -496,7 +688,9 @@
       detailInput.value = "";
       formMessage.textContent = "";
       showScreen("form");
-      termInput.focus();
+      setTimeout(function () {
+        termInput.focus();
+      }, 80);
     }
 
     function openEditForm(id) {
@@ -674,6 +868,11 @@
       reader.readAsText(file);
     }
 
+    function goBackToList() {
+      renderList();
+      showScreen("list");
+    }
+
     addButton.addEventListener("click", openAddForm);
 
     backupButton.addEventListener("click", function () {
@@ -685,10 +884,8 @@
 
     saveTermButton.addEventListener("click", saveForm);
 
-    cancelFormButton.addEventListener("click", function () {
-      renderList();
-      showScreen("list");
-    });
+    cancelFormButton.addEventListener("click", goBackToList);
+    cancelTopLink.addEventListener("click", goBackToList);
 
     editButton.addEventListener("click", function () {
       openEditForm(currentTermId);
@@ -696,10 +893,8 @@
 
     deleteButton.addEventListener("click", deleteCurrentTerm);
 
-    backFromDetailButton.addEventListener("click", function () {
-      renderList();
-      showScreen("list");
-    });
+    backFromDetailButton.addEventListener("click", goBackToList);
+    backTopLink.addEventListener("click", goBackToList);
 
     exportButton.addEventListener("click", exportJson);
 
@@ -707,10 +902,8 @@
       importJson(importFile.files[0]);
     });
 
-    backFromBackupButton.addEventListener("click", function () {
-      renderList();
-      showScreen("list");
-    });
+    backFromBackupButton.addEventListener("click", goBackToList);
+    backBackupTopLink.addEventListener("click", goBackToList);
 
     loadTerms();
     renderList();
