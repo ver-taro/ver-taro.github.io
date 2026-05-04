@@ -508,7 +508,7 @@
         <div class="backup-box">
           <p class="small-note">
             JSONを読み込むと、現在の保存内容にバックアップ内の言葉を追加します。
-念のため、読み込み前に書き出しておくと安全です。
+            念のため、読み込み前に書き出しておくと安全です。
           </p>
 
           <label for="importFile">JSONを読み込む</label>
@@ -961,73 +961,10 @@
       backupMessage.textContent = "JSONを書き出しました。";
     }
 
-    function importJson(file) {function importJson(file) {
-  if (!file) {
-    backupMessage.textContent = "ファイルが選ばれていません。";
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = function () {
-    try {
-      const data = JSON.parse(reader.result);
-
-      if (!data || !Array.isArray(data.terms)) {
-        backupMessage.textContent = "JSONの読み込みに失敗しました。";
+    function importJson(file) {
+      if (!file) {
+        backupMessage.textContent = "ファイルが選ばれていません。";
         return;
-      }
-
-      const result = confirm(
-        "JSONを読み込むと、現在の保存内容にバックアップ内の言葉を追加します。よろしいですか？"
-      );
-
-      if (!result) {
-        backupMessage.textContent = "読み込みをキャンセルしました。";
-        return;
-      }
-
-      const existingIds = new Set(
-        terms.map(function (item) {
-          return item.id;
-        })
-      );
-
-      const importedTerms = data.terms
-        .map(normalizeTerm)
-        .filter(function (item) {
-          return item.term.trim();
-        });
-
-      let addedCount = 0;
-      let skippedCount = 0;
-
-      importedTerms.forEach(function (item) {
-        if (existingIds.has(item.id)) {
-          skippedCount += 1;
-          return;
-        }
-
-        terms.push(item);
-        existingIds.add(item.id);
-        addedCount += 1;
-      });
-
-      saveTerms();
-      renderList();
-      importFile.value = "";
-
-      backupMessage.textContent =
-        "JSONを読み込みました。\n追加：" + addedCount + "件\n重複スキップ：" + skippedCount + "件";
-
-      showScreen("list");
-    } catch (error) {
-      backupMessage.textContent = "JSONの読み込みに失敗しました。";
-    }
-  };
-
-  reader.readAsText(file);
-}
       }
 
       const reader = new FileReader();
@@ -1042,7 +979,7 @@
           }
 
           const result = confirm(
-            "JSONを読み込むと、現在の保存内容が読み込んだ内容で置き換わります。よろしいですか？"
+            "JSONを読み込むと、現在の保存内容にバックアップ内の言葉を追加します。よろしいですか？"
           );
 
           if (!result) {
@@ -1050,16 +987,39 @@
             return;
           }
 
-          terms = data.terms
+          const existingIds = new Set(
+            terms.map(function (item) {
+              return item.id;
+            })
+          );
+
+          const importedTerms = data.terms
             .map(normalizeTerm)
             .filter(function (item) {
               return item.term.trim();
             });
 
+          let addedCount = 0;
+          let skippedCount = 0;
+
+          importedTerms.forEach(function (item) {
+            if (existingIds.has(item.id)) {
+              skippedCount += 1;
+              return;
+            }
+
+            terms.push(item);
+            existingIds.add(item.id);
+            addedCount += 1;
+          });
+
           saveTerms();
           renderList();
           importFile.value = "";
-          backupMessage.textContent = "JSONを読み込み、内容を復元しました。";
+
+          backupMessage.textContent =
+            "JSONを読み込みました。\n追加：" + addedCount + "件\n重複スキップ：" + skippedCount + "件";
+
           showScreen("list");
         } catch (error) {
           backupMessage.textContent = "JSONの読み込みに失敗しました。";
